@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Price Predictor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+    <main class="page-wrap">
+        <section class="hero-copy">
+            <p class="eyebrow">ML Powered Pricing</p>
+            <h1>Car Price Predictor</h1>
+            <p class="hero-text">
+                Enter your car details and get a quick estimated resale value.
+                Clean form, clear inputs, realistic experience.
+            </p>
+            <div class="hero-badges">
+                <span>Fast</span>
+                <span>Simple</span>
+                <span>Reliable Inputs</span>
+            </div>
+        </section>
+
+        <section class="form-card">
+            <form action="{{ url_for('predict_price') }}" method="post" class="predict-form" id="predictForm">
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="company">Company</label>
+                        <select name="company" id="company" required>
+                            {% for company in companies %}
+                                <option value="{{ company }}">{{ company }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="car_model">Model</label>
+                        <select name="car_model" id="car_model" required>
+                            {% for model in car_models %}
+                                <option value="{{ model }}">{{ model }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="year">Year of Purchase</label>
+                        <select name="year" id="year" required>
+                            {% for y in year %}
+                                <option value="{{ y }}">{{ y }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="fuel_type">Fuel Type</label>
+                        <select name="fuel_type" id="fuel_type" required>
+                            {% for fuel in fuel_type %}
+                                <option value="{{ fuel }}">{{ fuel }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field field-wide">
+                        <label for="kms_driven">Kilometers Driven</label>
+                        <input
+                            type="number"
+                            name="kms_driven"
+                            id="kms_driven"
+                            min="0"
+                            step="1"
+                            placeholder="e.g. 45000"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-predict" id="predictButton">Predict Price</button>
+            </form>
+
+            <div class="result-box result-hidden" id="resultBox" aria-live="polite">
+                <span>Estimated Price</span>
+                <strong id="predictionValue">Rs 0</strong>
+            </div>
+
+            <p class="result-message" id="resultMessage"></p>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+</html>
