@@ -2,13 +2,15 @@ from pathlib import Path
 import pickle
 from flask import Flask, render_template, request
 import pandas as pd
+import os
 
-# BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent
 
 app = Flask(__name__)
-car = pd.read_csv('cleaned_car_data.csv')
+car = pd.read_csv(os.path.join(BASE_DIR, 'cleaned_car_data.csv'))
 
-model = pickle.load(open(r'D:\DATA SCIENCE FINAL\ML PROJECTS\Car Price Predictor Project\webapp\LinerModelCar.pkl', 'rb'))
+model_path = os.path.join(BASE_DIR, 'LinerModelCar.pkl')
+model = pickle.load(open(model_path, 'rb'))
 
 def get_form_options():
     companies = sorted(car['company'].dropna().unique())
@@ -43,4 +45,5 @@ def predict_price():
     return str(prediction[0])
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False) 
